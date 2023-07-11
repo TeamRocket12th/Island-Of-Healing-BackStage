@@ -11,6 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       VITE_API_URL: ${{ secrets.VITE_API_URL }}
+
     steps:
       - name: Checkout repo
         uses: actions/checkout@v2
