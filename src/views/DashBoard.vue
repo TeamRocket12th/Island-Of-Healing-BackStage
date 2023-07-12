@@ -6,7 +6,11 @@ import SideBar from '../components/SideBar.vue'
 const announcement = ref([
   {
     id: '1',
-    content: '輸入文章ID，修改審核進度'
+    content: '修改文章審核進度'
+  },
+  {
+    id: '2',
+    content: '審核使用者提出的成為作家申請'
   }
 ])
 
@@ -20,12 +24,46 @@ router.beforeEach((to) => {
     showFeatures.value = true
   }
 })
+
+const isSidebarOpen = ref(true)
+
+const toggleSidebar = () => {
+  isSidebarOpen.value = !isSidebarOpen.value
+}
 </script>
 
 <template>
   <main class="bg-slate-100 h-screen grid grid-cols-12">
-    <div class="col-span-2 bg-slate-200">
-      <SideBar />
+    <!-- <div class="relative col-span-2">
+      <div
+        class="absolute h-full bg-slate-200 transition-all duration-300 ease-in-out overflow-hidden"
+        :class="isSidebarOpen ? 'left-0' : '-left-full'"
+      >
+        <SideBar />
+      </div>
+      <button
+        @click="toggleSidebar"
+        class="absolute top-0 right-0 transform -translate-x-[-50%] translate-y-2 bg-blue-500 text-white rounded-full p-2"
+      >
+        <span v-if="isSidebarOpen">-</span>
+        <span v-else>+</span>
+      </button>
+    </div> -->
+    <div class="relative col-span-2">
+      <div
+        class="absolute h-full bg-slate-200 transition-all duration-300 ease-in-out overflow-hidden"
+        :class="isSidebarOpen ? 'left-0' : '-left-full'"
+      >
+        <SideBar />
+      </div>
+      <button
+        @click="toggleSidebar"
+        class="absolute top-1/4 transform -translate-x-[-50%] translate-y-2 bg-slate-500 text-white border-none rounded-full p-2 transition-all duration-300"
+        :style="{ left: isSidebarOpen ? '14rem' : '0' }"
+      >
+        <span v-if="isSidebarOpen">-</span>
+        <span v-else>+</span>
+      </button>
     </div>
     <div class="col-span-10 bg-slate-100 p-6">
       <div v-if="showFeatures">
