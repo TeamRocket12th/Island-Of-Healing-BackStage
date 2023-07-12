@@ -2,8 +2,17 @@
 import { RouterLink, RouterView, useRouter } from 'vue-router'
 import { useAdminStore } from '@/stores/admin'
 import { storeToRefs } from 'pinia'
+import { onMounted } from 'vue'
 
 const { adminToken, adminId } = storeToRefs(useAdminStore())
+const { getAdminToken } = useAdminStore()
+
+onMounted(() => {
+  const token = localStorage.getItem('token')
+  if (token) {
+    getAdminToken(token)
+  }
+})
 
 const router = useRouter()
 
