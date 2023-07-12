@@ -148,6 +148,15 @@ const changeRole = async (id: number, result: string) => {
                       審核失敗
                     </button>
                   </div>
+                  <!-- <div v-else-if="user.WriterProgress === '申請失敗'">
+                    <button
+                      type="button"
+                      class="btn btn-sm font-medium bg-green-300"
+                      @click="changeRole(user.Id, '3')"
+                    >
+                      審核通過
+                    </button>
+                  </div> -->
                   <div v-else>-</div>
                 </td>
               </tr>
