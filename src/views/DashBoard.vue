@@ -6,7 +6,11 @@ import SideBar from '../components/SideBar.vue'
 const announcement = ref([
   {
     id: '1',
-    content: '輸入文章ID，修改審核進度'
+    content: '修改文章審核進度'
+  },
+  {
+    id: '2',
+    content: '審核使用者提出的成為作家申請'
   }
 ])
 
