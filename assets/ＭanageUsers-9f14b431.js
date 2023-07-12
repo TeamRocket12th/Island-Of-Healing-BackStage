@@ -1,1 +1,0 @@
-import{o as r,c as s}from"./index-c311599a.js";const _=(e,t)=>{const c=e.__vccOpts||e;for(const[n,o]of t)c[n]=o;return c},a={};function f(e,t){return r(),s("div",null,"目前沒有這功能 ^_^")}const p=_(a,[["render",f]]);export{p as default};
