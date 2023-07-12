@@ -33,8 +33,8 @@ const toggleSidebar = () => {
 </script>
 
 <template>
-  <main class="bg-slate-100 h-screen grid grid-cols-12">
-    <div class="relative col-span-2">
+  <main class="bg-slate-100 h-screen grid" :class="isSidebarOpen ? 'grid-cols-12' : 'block'">
+    <div class="relative" :class="isSidebarOpen ? 'col-span-2' : ''">
       <div
         class="absolute h-full bg-slate-200 transition-all duration-300 ease-in-out overflow-hidden"
         :class="isSidebarOpen ? 'left-0' : '-left-full'"
@@ -50,7 +50,7 @@ const toggleSidebar = () => {
         <span v-else>+</span>
       </button>
     </div>
-    <div class="col-span-10 bg-slate-100 p-6">
+    <div class="bg-slate-100 p-6" :class="isSidebarOpen ? 'col-span-10' : 'col-span-full'">
       <div v-if="showFeatures">
         <h2 class="text-2xl font-semibold text-slate-800 mb-10">目前功能</h2>
         <ul>
@@ -59,7 +59,6 @@ const toggleSidebar = () => {
           </li>
         </ul>
       </div>
-
       <RouterView />
     </div>
   </main>
