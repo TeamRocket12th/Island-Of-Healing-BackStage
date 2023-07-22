@@ -9,7 +9,7 @@
         >
       </li>
       <li class="text-blue-950 hover:bg-slate-600 hover:text-white cursor-pointer">
-        <RouterLink to="/dashboard/reviewarticles" class="block px-4 py-2">審核文章</RouterLink>
+        <RouterLink to="/dashboard/reviewarticles" class="block px-4 py-2">管理文章</RouterLink>
       </li>
     </ul>
   </div>
