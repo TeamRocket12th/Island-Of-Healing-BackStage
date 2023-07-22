@@ -6,7 +6,7 @@ const apiBase = import.meta.env.VITE_API_URL
 const { getAdminToken, getAdminId } = useAdminStore()
 
 const adminData = reactive({
-  Account: 'administrator@gmail.com',
+  Account: 'administrator@example.com',
   Password: 'Test0000'
 })
 

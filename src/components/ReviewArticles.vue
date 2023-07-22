@@ -1,13 +1,9 @@
 <script setup lang="ts">
-import { onMounted, reactive, ref } from 'vue'
-
-const apiBase = import.meta.env.VITE_API_URL
-
 interface ApiResponse {
   [key: string]: any
 }
 
-interface ArticleProgress {
+interface ArticleInfo {
   Id: number
   Title: string
   Initdate: string
@@ -15,42 +11,85 @@ interface ArticleProgress {
   ArticleImgUrl: string
   Progress: string
   newProgress: string
+  Selected: boolean
 }
 
-const getProgressValue = (progress: string) => {
-  switch (progress) {
-    case '待審核':
-      return '1'
-    case '審核中':
-      return '2'
-    case '審核失敗':
-      return '3'
-    case '審核成功':
-      return '4'
-    default:
-      return '1'
+const props = defineProps({
+  reviewArticles: {
+    type: Array as () => ArticleInfo[],
+    required: true
+  },
+  getAllArticles: {
+    type: Function,
+    required: true
   }
-}
+})
 
-const articles = ref<ArticleProgress[]>([])
+const apiBase = import.meta.env.VITE_API_URL
 
-const getAllArticles = async () => {
+// const getProgressValue = (progress: string) => {
+//   switch (progress) {
+//     case '待審核':
+//       return '1'
+//     case '審核中':
+//       return '2'
+//     case '審核失敗':
+//       return '3'
+//     case '審核成功':
+//       return '4'
+//     default:
+//       return '1'
+//   }
+// }
+
+// const articles = ref<ArticleProgress[]>([])
+
+// const getAllArticles = async () => {
+//   const token = localStorage.getItem('token')
+//   if (!token) {
+//     return
+//   }
+//   try {
+//     const res: ApiResponse = await fetch(`${apiBase}/administratorarticles/get`, {
+//       headers: { 'Content-type': 'application/json', Authorization: `Bearer ${token}` }
+//     })
+//     const data = await res.json()
+//     console.log(data)
+//     if (data.StatusCode === 200) {
+//       articles.value = data.ArticlesData.map((article: ArticleProgress) => ({
+//         ...article,
+//         newProgress: getProgressValue(article.Progress)
+//       })).reverse()
+//       console.log(articles.value)
+//     } else {
+//       throw new Error(`發生錯誤 ${data.Message}`)
+//     }
+//   } catch (error) {
+//     console.log(error)
+//   }
+// }
+
+// onMounted(getAllArticles)
+
+// 對追蹤者送出發文通知
+const sendPublishMsg = async (id: number) => {
   const token = localStorage.getItem('token')
   if (!token) {
     return
   }
   try {
-    const res: ApiResponse = await fetch(`${apiBase}/administratorarticles/get`, {
-      headers: { 'Content-type': 'application/json', Authorization: `Bearer ${token}` }
-    })
+    const res: ApiResponse = await fetch(
+      `${apiBase}/followedwriternewarticlenotification/create?articleid=${id}`,
+      {
+        headers: { 'Content-type': 'application/json', Authorization: `Bearer ${token}` },
+        method: 'POST'
+      }
+    )
     const data = await res.json()
     console.log(data)
     if (data.StatusCode === 200) {
-      articles.value = data.ArticlesData.map((article: ArticleProgress) => ({
-        ...article,
-        newProgress: getProgressValue(article.Progress)
-      }))
-      console.log(articles.value)
+      console.log(data.Message)
+      props.getAllArticles()
     } else {
       throw new Error(`發生錯誤 ${data.Message}`)
     }
@@ -59,15 +98,14 @@ const getAllArticles = async () => {
   }
 }
 
-onMounted(getAllArticles)
-
 // 變更審核進度
-const changeProgress = async (article: ArticleProgress, id: number) => {
+const changeProgress = async (article: ArticleInfo, id: number) => {
   const token = localStorage.getItem('token')
   const adminId = localStorage.getItem('adminId')
   if (!token && !adminId) {
     return
   }
+  console.log(article)
   try {
     const res: ApiResponse = await fetch(`${apiBase}/article/updateprogress/${id}`, {
       headers: { 'Content-type': 'application/json', Authorization: `Bearer ${token}` },
@@ -76,9 +114,12 @@ const changeProgress = async (article: ArticleProgress, id: number) => {
     })
     const data = await res.json()
     console.log(data)
-    if (data.StatusCode === 200) {
+    if (data.StatusCode === 200 && article.newProgress !== '4') {
       alert(data.Message)
-      getAllArticles()
+      props.getAllArticles()
+    } else if (data.StatusCode === 200 && article.newProgress === '4') {
+      alert(data.Message)
+      sendPublishMsg(id)
     } else {
       throw new Error(`發生錯誤 ${data.Message}`)
     }
@@ -89,7 +130,7 @@ const changeProgress = async (article: ArticleProgress, id: number) => {
 </script>
 
 <template>
-  <div v-if="articles" class="flex flex-col">
+  <div v-if="reviewArticles" class="flex flex-col">
     <div class="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
       <div class="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
         <div class="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
@@ -139,7 +180,7 @@ const changeProgress = async (article: ArticleProgress, id: number) => {
               </tr>
             </thead>
             <tbody class="bg-white divide-y divide-gray-200">
-              <tr v-for="article in articles" :key="article.Id">
+              <tr v-for="article in reviewArticles" :key="article.Id">
                 <td class="px-6 py-4 whitespace-nowrap text-gray-500">
                   {{ article.Id }}
                 </td>
@@ -152,7 +193,13 @@ const changeProgress = async (article: ArticleProgress, id: number) => {
                 <td class="px-6 py-4 whitespace-nowrap text-gray-500">
                   {{ article.WriterNickName }}
                 </td>
-                <td class="px-6 py-4 whitespace-nowrap text-gray-500">
+                <td
+                  class="px-6 py-4 whitespace-nowrap text-gray-500"
+                  :class="{
+                    'text-green-600': article.Progress === '審核成功',
+                    'text-red-600': article.Progress === '待審核'
+                  }"
+                >
                   {{ article.Progress }}
                 </td>
                 <td class="px-6 py-4 whitespace-nowrap text-gray-500">

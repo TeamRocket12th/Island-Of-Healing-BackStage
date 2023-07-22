@@ -41,6 +41,29 @@ const getApplication = async () => {
 
 onMounted(getApplication)
 
+// 發出審核結果訊息
+const sendResult = async (id: number) => {
+  const token = localStorage.getItem('token')
+  if (!token) {
+    return
+  }
+  try {
+    const res: ApiResponse = await fetch(`${apiBase}/writernotification/create?writerid=${id}`, {
+      headers: { 'Content-type': 'application/json', Authorization: `Bearer ${token}` },
+      method: 'POST'
+    })
+    const data = await res.json()
+    console.log(data)
+    if (data.StatusCode === 200) {
+      console.log(data.Message)
+    } else {
+      throw new Error(`發生錯誤 ${data.Message}`)
+    }
+  } catch (error) {
+    console.log(error)
+  }
+}
+
 // 修改作家身份
 // result
 // 2=審核失敗；3=審核成功
@@ -59,6 +82,7 @@ const changeRole = async (id: number, result: string) => {
     console.log(data)
     if (data.StatusCode === 200) {
       alert(data.Message)
+      sendResult(id)
       getApplication()
     } else {
       throw new Error(`發生錯誤 ${data.Message}`)

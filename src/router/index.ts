@@ -21,7 +21,11 @@ const routes = [
     children: [
       {
         path: 'reviewarticles',
-        component: () => import('../components/ReviewArticles.vue')
+        component: () => import('../components/ArticleList.vue')
+      },
+      {
+        path: 'selectarticles',
+        component: () => import('../components/ArticleList.vue')
       },
       {
         path: 'manageusers',
