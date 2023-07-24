@@ -56,6 +56,31 @@ const sendResult = async (id: number) => {
     console.log(data)
     if (data.StatusCode === 200) {
       console.log(data.Message)
+      await pushWriter(id)
+    } else {
+      throw new Error(`發生錯誤 ${data.Message}`)
+    }
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+// Pusher通知審核通過
+// Pusher通知追蹤者
+const pushWriter = async (id: number) => {
+  const token = localStorage.getItem('token')
+  if (!token) {
+    return
+  }
+  try {
+    const res: ApiResponse = await fetch(`${apiBase}/pusher/bewriter?writerid=${id}`, {
+      headers: { 'Content-type': 'application/json', Authorization: `Bearer ${token}` },
+      method: 'POST'
+    })
+    const data = await res.json()
+    console.log(data)
+    if (data.StatusCode === 200) {
+      console.log('pushed')
     } else {
       throw new Error(`發生錯誤 ${data.Message}`)
     }

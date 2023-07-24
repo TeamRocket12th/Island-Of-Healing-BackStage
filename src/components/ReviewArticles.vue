@@ -89,6 +89,33 @@ const sendPublishMsg = async (id: number) => {
     console.log(data)
     if (data.StatusCode === 200) {
       console.log(data.Message)
+      await pushArticleInfo(id)
+    } else {
+      throw new Error(`發生錯誤 ${data.Message}`)
+    }
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+// Pusher通知追蹤者
+const pushArticleInfo = async (id: number) => {
+  const token = localStorage.getItem('token')
+  if (!token) {
+    return
+  }
+  try {
+    const res: ApiResponse = await fetch(
+      `${apiBase}/pusher/followedwriternewarticle?articleid=${id}`,
+      {
+        headers: { 'Content-type': 'application/json', Authorization: `Bearer ${token}` },
+        method: 'POST'
+      }
+    )
+    const data = await res.json()
+    console.log(data)
+    if (data.StatusCode === 200) {
+      console.log('pushed')
       props.getAllArticles()
     } else {
       throw new Error(`發生錯誤 ${data.Message}`)
