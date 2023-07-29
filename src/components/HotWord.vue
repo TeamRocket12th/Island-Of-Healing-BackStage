@@ -4,9 +4,10 @@ const apiBase = import.meta.env.VITE_API_URL
 interface ApiResponse {
   [key: string]: any
 }
+const datas = ref<ApiResponse[]>([]);
 // 取得熱門關鍵字
 const load = ref(true)
-const datas = ref([]);
+
 
 const years = [2023,2024,2025,2026,2027,2028]
 const months = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12,];

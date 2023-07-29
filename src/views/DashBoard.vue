@@ -10,11 +10,14 @@ const announcement = ref([
   },
   {
     id: '2',
-    content: '審核使用者提出的成為作家申請'
+    content: '審核使用者提出的成為作家申請,取消作家身分'
   },
   {
     id: '3',
     content: '熱門關鍵字搜尋'
+  }, {
+    id: '4',
+    content: '費用單管理'
   }
 ])
 

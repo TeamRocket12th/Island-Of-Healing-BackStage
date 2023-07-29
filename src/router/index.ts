@@ -34,6 +34,10 @@ const routes = [
       {
         path: 'hotword',
         component: () => import('../components/HotWord.vue')
+      },
+      {
+        path: 'feecalculate',
+        component: () => import('../components/FeeCalculate.vue')
       }
     ]
   }
