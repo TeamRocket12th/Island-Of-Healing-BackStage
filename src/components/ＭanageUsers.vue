@@ -1,6 +1,6 @@
-<script setup lang="ts">
+<script setup lang="ts"  type = 'module'>
 import { ref, onMounted } from 'vue'
-
+import Swal from 'sweetalert2';
 const apiBase = import.meta.env.VITE_API_URL
 
 interface ApiResponse {
@@ -31,6 +31,8 @@ const getApplication = async () => {
     console.log(data)
     if (data.StatusCode === 200) {
       userData.value = data.UserData
+      console.log('userData', userData.value);
+      
     } else {
       throw new Error(`發生錯誤 ${data.Message}`)
     }
@@ -116,6 +118,54 @@ const changeRole = async (id: number, result: string) => {
     console.log(error)
   }
 }
+
+
+
+// 取消作家身份
+const cancelRole = (id: number) => {
+   Swal.fire({
+    title: "請確認是否刪除作家身份",
+    text: "一但刪除將無法回復，必須重新申請",
+    icon: "error",
+    showCancelButton: true,
+    confirmButtonColor: "#d33",
+    cancelButtonColor: "#3085d6",
+    confirmButtonText: "確定刪除",
+    cancelButtonText: "關閉"
+  }).then((result:any) => {
+    // console.log(result);
+    if (result.isConfirmed) {
+      cancelWriters(id);
+     
+    }
+  });
+};
+
+const cancelWriters = async (id: number) => {
+  const token = localStorage.getItem('token')
+  if (!token) {
+    return
+  }
+  try {
+    const res: ApiResponse = await fetch(`${apiBase}/cancelwriter/${id}`, {
+      headers: { 'Content-type': 'application/json', Authorization: `Bearer ${token}` },
+      method: 'PUT'
+    })
+    const data = await res.json()
+    console.log(data)
+    if (data.StatusCode === 200) {
+      Swal.fire("已刪除", "該作家身份刪除成功", "success");
+      getApplication()
+
+    } else {
+      throw new Error(`發生錯誤 ${data.Message}`)
+    }
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+
 </script>
 <template>
   <div v-if="userData" class="flex flex-col">
@@ -196,6 +246,16 @@ const changeRole = async (id: number, result: string) => {
                     >
                       審核失敗
                     </button>
+                  </div>
+                  <div v-else-if="user.WriterProgress === '申請成功'" class="flex gap-4">
+                      <button
+                        type="button"
+                        class="btn btn-sm font-medium bg-red-600 text-white"
+                        @click="
+                        cancelRole(user.Id)"
+                      >
+                      取消作家身份
+                      </button>
                   </div>
                   <div v-else>-</div>
                 </td>

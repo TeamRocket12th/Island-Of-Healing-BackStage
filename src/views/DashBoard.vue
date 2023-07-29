@@ -10,7 +10,7 @@ const announcement = ref([
   },
   {
     id: '2',
-    content: '審核使用者提出的成為作家申請'
+    content: '審核使用者提出的成為作家申請,取消作家身分'
   },
   {
     id: '3',
