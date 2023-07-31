@@ -14,10 +14,14 @@ const announcement = ref([
   },
   {
     id: '3',
-    content: '熱門關鍵字搜尋'
+    content: '精選文章管理'
   },
   {
     id: '4',
+    content: '熱門關鍵字搜尋'
+  },
+  {
+    id: '5',
     content: '費用單管理'
   }
 ])

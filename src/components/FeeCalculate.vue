@@ -156,7 +156,7 @@ const formatDate = (dateString: string) => {
                 <td class="px-6 py-4 whitespace-nowrap" v-if="data.Edit">
                       <input v-model="data.ContractId" class="border">
                 </td>
-                <td class="px-6 py-4 whitespace-nowrap underline  text-blue-500 cursor-pointer" @click="editFee(data)" v-else>
+                <td class="px-6 py-4 whitespace-nowrap" v-else>
                     {{ data.ContractId }}
                 </td>
                 <td class="px-6 py-4 whitespace-nowrap text-gray-500">
