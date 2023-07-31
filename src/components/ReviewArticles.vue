@@ -27,50 +27,6 @@ const props = defineProps({
 
 const apiBase = import.meta.env.VITE_API_URL
 
-// const getProgressValue = (progress: string) => {
-//   switch (progress) {
-//     case '待審核':
-//       return '1'
-//     case '審核中':
-//       return '2'
-//     case '審核失敗':
-//       return '3'
-//     case '審核成功':
-//       return '4'
-//     default:
-//       return '1'
-//   }
-// }
-
-// const articles = ref<ArticleProgress[]>([])
-
-// const getAllArticles = async () => {
-//   const token = localStorage.getItem('token')
-//   if (!token) {
-//     return
-//   }
-//   try {
-//     const res: ApiResponse = await fetch(`${apiBase}/administratorarticles/get`, {
-//       headers: { 'Content-type': 'application/json', Authorization: `Bearer ${token}` }
-//     })
-//     const data = await res.json()
-//     console.log(data)
-//     if (data.StatusCode === 200) {
-//       articles.value = data.ArticlesData.map((article: ArticleProgress) => ({
-//         ...article,
-//         newProgress: getProgressValue(article.Progress)
-//       })).reverse()
-//       console.log(articles.value)
-//     } else {
-//       throw new Error(`發生錯誤 ${data.Message}`)
-//     }
-//   } catch (error) {
-//     console.log(error)
-//   }
-// }
-
-// onMounted(getAllArticles)
-
 // 對追蹤者送出發文通知
 const sendPublishMsg = async (id: number) => {
   const token = localStorage.getItem('token')
@@ -115,8 +71,57 @@ const pushArticleInfo = async (id: number) => {
     const data = await res.json()
     console.log(data)
     if (data.StatusCode === 200) {
-      console.log('pushed')
+      console.log('pushed fllower')
       props.getAllArticles()
+    } else {
+      throw new Error(`發生錯誤 ${data.Message}`)
+    }
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+const sendProgressMsg = async (id: number) => {
+  const token = localStorage.getItem('token')
+  if (!token) {
+    return
+  }
+  try {
+    const res: ApiResponse = await fetch(
+      `${apiBase}/writernewarticlenotification/create?articleid=${id}`,
+      {
+        headers: { 'Content-type': 'application/json', Authorization: `Bearer ${token}` },
+        method: 'POST'
+      }
+    )
+    const data = await res.json()
+    console.log(data)
+    if (data.StatusCode === 200) {
+      console.log(data.Message)
+      await pushProgressMsg(id)
+    } else {
+      throw new Error(`發生錯誤 ${data.Message}`)
+    }
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+// Pusher 審核文章通過通知
+const pushProgressMsg = async (id: number) => {
+  const token = localStorage.getItem('token')
+  if (!token) {
+    return
+  }
+  try {
+    const res: ApiResponse = await fetch(`${apiBase}/pusher/newarticleapproved?articleid=${id}`, {
+      headers: { 'Content-type': 'application/json', Authorization: `Bearer ${token}` },
+      method: 'POST'
+    })
+    const data = await res.json()
+    console.log(data)
+    if (data.StatusCode === 200) {
+      console.log('pushed progress')
     } else {
       throw new Error(`發生錯誤 ${data.Message}`)
     }
@@ -146,7 +151,8 @@ const changeProgress = async (article: ArticleInfo, id: number) => {
       props.getAllArticles()
     } else if (data.StatusCode === 200 && article.newProgress === '4') {
       alert(data.Message)
-      sendPublishMsg(id)
+      await sendProgressMsg(id)
+      await sendPublishMsg(id)
     } else {
       throw new Error(`發生錯誤 ${data.Message}`)
     }

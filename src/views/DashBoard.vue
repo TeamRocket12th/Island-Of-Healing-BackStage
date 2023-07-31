@@ -14,9 +14,14 @@ const announcement = ref([
   },
   {
     id: '3',
-    content: '熱門關鍵字搜尋'
-  }, {
+    content: '精選文章管理'
+  },
+  {
     id: '4',
+    content: '熱門關鍵字搜尋'
+  },
+  {
+    id: '5',
     content: '費用單管理'
   }
 ])
@@ -40,7 +45,7 @@ const toggleSidebar = () => {
 </script>
 
 <template>
-  <main class="bg-slate-100 h-screen grid" :class="isSidebarOpen ? 'grid-cols-12' : 'block'">
+  <main class="bg-slate-100 grid min-h-screen" :class="isSidebarOpen ? 'grid-cols-12' : 'block'">
     <div class="relative" :class="isSidebarOpen ? 'col-span-2' : ''">
       <div
         class="absolute h-full bg-slate-200 transition-all duration-300 ease-in-out overflow-hidden"
