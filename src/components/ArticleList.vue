@@ -2,12 +2,8 @@
 import ReviewArticles from './ReviewArticles.vue'
 import SelectArticles from './SelectArticles.vue'
 import { onMounted, ref } from 'vue'
-import { useRouter } from 'vue-router'
 
-const router = useRouter()
-console.log(router.currentRoute.value)
 const apiBase = import.meta.env.VITE_API_URL
-
 const showReview = ref(true)
 
 interface ApiResponse {

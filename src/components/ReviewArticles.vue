@@ -27,50 +27,6 @@ const props = defineProps({
 
 const apiBase = import.meta.env.VITE_API_URL
 
-// const getProgressValue = (progress: string) => {
-//   switch (progress) {
-//     case '待審核':
-//       return '1'
-//     case '審核中':
-//       return '2'
-//     case '審核失敗':
-//       return '3'
-//     case '審核成功':
-//       return '4'
-//     default:
-//       return '1'
-//   }
-// }
-
-// const articles = ref<ArticleProgress[]>([])
-
-// const getAllArticles = async () => {
-//   const token = localStorage.getItem('token')
-//   if (!token) {
-//     return
-//   }
-//   try {
-//     const res: ApiResponse = await fetch(`${apiBase}/administratorarticles/get`, {
-//       headers: { 'Content-type': 'application/json', Authorization: `Bearer ${token}` }
-//     })
-//     const data = await res.json()
-//     console.log(data)
-//     if (data.StatusCode === 200) {
-//       articles.value = data.ArticlesData.map((article: ArticleProgress) => ({
-//         ...article,
-//         newProgress: getProgressValue(article.Progress)
-//       })).reverse()
-//       console.log(articles.value)
-//     } else {
-//       throw new Error(`發生錯誤 ${data.Message}`)
-//     }
-//   } catch (error) {
-//     console.log(error)
-//   }
-// }
-
-// onMounted(getAllArticles)
-
 // 對追蹤者送出發文通知
 const sendPublishMsg = async (id: number) => {
   const token = localStorage.getItem('token')

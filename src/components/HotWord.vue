@@ -46,7 +46,7 @@ onMounted(getHotWord)
         <option v-for="year in years" :key="year" :value="year">{{ year }}</option>
       </select>
       <select v-model="selectedMonth" class="rounded p-2 h-[40px] w-[120px] cursor-pointer">
-        <option selected value="0">整年</option>
+        <option value="0">整年</option>
         <option v-for="month in months" :key="month" :value="month">{{ month }}</option>
       </select>
       <button class="border h-[40px] px-4 bg-blue-900 text-white rounded" @click="getHotWord">
