@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import Swal from 'sweetalert2'
 import { onMounted } from 'vue'
-import useArticles from '../composables/useArticles.ts'
+import useArticles from '../composables/useArticles'
 
 interface ApiResponse {
   [key: string]: any
