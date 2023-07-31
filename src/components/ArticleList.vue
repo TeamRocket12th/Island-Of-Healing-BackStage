@@ -58,7 +58,6 @@ const getAllArticles = async () => {
         ...article,
         newProgress: getProgressValue(article.Progress)
       })).reverse()
-      console.log(reviewArticles.value)
     } else {
       throw new Error(`發生錯誤 ${data.Message}`)
     }
