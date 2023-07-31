@@ -30,6 +30,14 @@ const routes = [
       {
         path: 'manageusers',
         component: () => import('../components/ＭanageUsers.vue')
+      },
+      {
+        path: 'hotword',
+        component: () => import('../components/HotWord.vue')
+      },
+      {
+        path: 'feecalculate',
+        component: () => import('../components/FeeCalculate.vue')
       }
     ]
   }
