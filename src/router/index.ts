@@ -28,6 +28,10 @@ const routes = [
         component: () => import('../components/ArticleList.vue')
       },
       {
+        path: 'bestarticles',
+        component: () => import('../components/BestArticle.vue')
+      },
+      {
         path: 'manageusers',
         component: () => import('../components/ＭanageUsers.vue')
       },
