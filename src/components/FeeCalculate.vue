@@ -18,9 +18,7 @@ const getFee = async () => {
       headers: { 'Content-type': 'application/json', Authorization: `Bearer ${token}` }
     })
     const data = await res.json()
-    console.log(data)
     if (data.StatusCode === 200) {
-      console.log(data.ExpenseData)
       datas.value = data.ExpenseData
     } else {
       throw new Error(`發生錯誤 ${data.Message}`)
@@ -31,7 +29,6 @@ const getFee = async () => {
 }
 onMounted(getFee)
 // 新增費用單
-// const datas = ref<ApiResponse[]>([]);
 const id = ref('')
 const createFee = async () => {
   const token = localStorage.getItem('token')
@@ -46,7 +43,6 @@ const createFee = async () => {
     })
     const data = await res.json()
     if (data.StatusCode === 200) {
-      console.log(data.ExpenseData)
       datas.value = data.ExpenseData
       getFee()
     } else {
@@ -58,9 +54,19 @@ const createFee = async () => {
 }
 
 // 修改費用單
-const editFee = async (data: any) => {
-  const token = localStorage.getItem('token')
+type FeeDetail = {
+  Amount: number
+  ContractId: string
+  Edit: boolean
+  Id: number
+  InitDate: string
+  Paid: boolean
+  PayDate: string
+  WriterId: number
+}
 
+const editFee = async (data: FeeDetail) => {
+  const token = localStorage.getItem('token')
   if (!token) {
     return
   }
@@ -81,7 +87,6 @@ const editFee = async (data: any) => {
     })
 
     const responseData = await res.json()
-    console.log(responseData)
 
     if (responseData.StatusCode === 200) {
       datas.value = responseData.ExpenseData
@@ -229,7 +234,7 @@ const formatDate = (dateString: string) => {
                     type="button"
                     class="p-2 h-10 px-4 bg-emerald-600 text-white rounded-md"
                     v-else
-                    @click="editFee(data)"
+                    @click="editFee(data as FeeDetail)"
                   >
                     完成
                   </button>
