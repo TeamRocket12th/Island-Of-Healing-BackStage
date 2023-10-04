@@ -235,7 +235,7 @@ const cancelWriters = async (id: number) => {
                     </button>
                     <button
                       type="button"
-                      class="btn btn-sm font-normal bg-rose-500 text-white hover:bg-rose-600"
+                      class="btn btn-sm font-normal bg-rose-700 text-white hover:bg-rose-800"
                       @click="changeRole(user.Id, '2')"
                     >
                       審核失敗
@@ -244,7 +244,7 @@ const cancelWriters = async (id: number) => {
                   <div v-else-if="user.WriterProgress === '申請成功'" class="flex gap-4">
                     <button
                       type="button"
-                      class="btn btn-sm font-normal bg-orange-400 text-white hover:bg-orange-500"
+                      class="btn btn-sm font-normal border-orange-400 bg-slate-50 border-2 hover:bg-orange-500 hover:text-white"
                       @click="cancelRole(user.Id)"
                     >
                       取消作家身份
