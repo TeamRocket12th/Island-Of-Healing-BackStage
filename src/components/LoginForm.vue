@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import router from '@/router'
-import { reactive } from 'vue'
+import { ref,reactive } from 'vue'
 import { useAdminStore } from '@/stores/admin'
 const apiBase = import.meta.env.VITE_API_URL
 const { getAdminToken, getAdminId } = useAdminStore()
@@ -10,11 +10,14 @@ const adminData = reactive({
   Password: 'Test0000'
 })
 
+const isFetched = ref(false)
+
 interface ApiResponse {
   [key: string]: any
 }
 
 const handleLogin = async () => {
+  isFetched.value = true
   try {
     const res: ApiResponse = await fetch(`${apiBase}/login`, {
       headers: { 'Content-type': 'application/json' },
@@ -22,7 +25,6 @@ const handleLogin = async () => {
       body: JSON.stringify(adminData)
     })
     const data = await res.json()
-    console.log(data)
     if (data.StatusCode === 200) {
       alert(data.Message)
       router.push('/dashboard')
@@ -31,6 +33,8 @@ const handleLogin = async () => {
     }
   } catch (error) {
     console.log(error)
+  }finally {
+    isFetched.value = false
   }
 }
 </script>
@@ -57,7 +61,11 @@ const handleLogin = async () => {
           v-model="adminData.Password"
         />
       </div>
-      <button class="btn w-2/3 bg-gray-200" type="submit" @click.prevent="handleLogin">登入</button>
+      <button class="btn w-2/3 bg-gray-200" type="submit" @click.prevent="handleLogin" :disabled="isFetched">
+            <span v-if="!isFetched">登入</span>
+            <span v-else>登入中...</span>
+      </button>
+
     </form>
   </div>
 </template>

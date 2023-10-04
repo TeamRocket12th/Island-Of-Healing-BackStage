@@ -33,7 +33,6 @@ const createBestArticles = async (articleId: number, select: boolean) => {
       headers: { 'Content-type': 'application/json', Authorization: `Bearer ${token}` }
     })
     const bestArticleList = await res.json()
-    console.log(bestArticleList)
     if (bestArticleList.StatusCode === 200) {
       bestArticleList.Selected = select
       Swal.fire('新增精選成功', '該文章已被加入精選列表', 'success')
@@ -58,7 +57,6 @@ const cancelBestArticles = async (articleId: number, select: boolean) => {
       headers: { 'Content-type': 'application/json', Authorization: `Bearer ${token}` }
     })
     const bestArticleList = await res.json()
-    console.log(bestArticleList)
     if (bestArticleList.StatusCode === 200) {
       bestArticleList.Selected = select
       Swal.fire('刪除精選成功', '該文章已被移除精選列表', 'success')
@@ -149,13 +147,16 @@ onMounted(getAllArticles)
                   </td>
 
                   <td class="px-6 py-4 whitespace-nowrap text-gray-500 text-center">
-                    <button @click="toggleSelectedStatus(article)">
-                      <button
-                        class="border ml-2 p-2 h-[40px] px-4 text-white rounded"
-                        :class="article.Selected ? 'bg-rose-700' : 'bg-green-700'"
-                      >
-                        {{ article.Selected ? '刪除精選' : '新增精選' }}
-                      </button>
+                    <button
+                      @click="toggleSelectedStatus(article)"
+                      class="btn btn-sm border ml-2 p-2 h-9 rounded-md px-4 text-white font-normal"
+                      :class="
+                        article.Selected
+                          ? 'bg-rose-700 hover:bg-rose-800'
+                          : 'bg-teal-600 hover:bg-teal-700'
+                      "
+                    >
+                      {{ article.Selected ? '刪除精選' : '新增精選' }}
                     </button>
                   </td>
                 </tr>

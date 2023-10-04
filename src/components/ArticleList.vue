@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import ReviewArticles from './ReviewArticles.vue'
-import SelectArticles from './SelectArticles.vue'
 import { onMounted, ref } from 'vue'
 
 const apiBase = import.meta.env.VITE_API_URL
@@ -48,7 +47,6 @@ const getAllArticles = async () => {
       headers: { 'Content-type': 'application/json', Authorization: `Bearer ${token}` }
     })
     const data = await res.json()
-    console.log(data)
     if (data.StatusCode === 200) {
       reviewArticles.value = data.ArticlesData.map((article: ArticleInfo) => ({
         ...article,
@@ -72,7 +70,6 @@ onMounted(getAllArticles)
       :reviewArticles="reviewArticles"
       :getAllArticles="getAllArticles"
     />
-    <SelectArticles v-else />
   </div>
 </template>
 
