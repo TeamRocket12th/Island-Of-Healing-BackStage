@@ -28,11 +28,8 @@ const getApplication = async () => {
       headers: { 'Content-type': 'application/json', Authorization: `Bearer ${token}` }
     })
     const data = await res.json()
-    console.log(data)
     if (data.StatusCode === 200) {
       userData.value = data.UserData
-      console.log('userData', userData.value);
-
     } else {
       throw new Error(`發生錯誤 ${data.Message}`)
     }
@@ -56,7 +53,6 @@ const sendResult = async (id: number) => {
     })
     const data = await res.json()
     if (data.StatusCode === 200) {
-      console.log(data.Message)
       await pushWriter(id)
     } else {
       throw new Error(`發生錯誤 ${data.Message}`)
@@ -102,7 +98,6 @@ const changeRole = async (id: number, result: string) => {
       method: 'PUT'
     })
     const data = await res.json()
-    console.log(data)
     if (data.StatusCode === 200) {
       alert(data.Message)
       sendResult(id)
@@ -129,7 +124,6 @@ const cancelRole = (id: number) => {
     confirmButtonText: "確定刪除",
     cancelButtonText: "關閉"
   }).then((result:any) => {
-    // console.log(result);
     if (result.isConfirmed) {
       cancelWriters(id);
 
@@ -148,7 +142,6 @@ const cancelWriters = async (id: number) => {
       method: 'PUT'
     })
     const data = await res.json()
-    console.log(data)
     if (data.StatusCode === 200) {
       Swal.fire("已刪除", "該作家身份刪除成功", "success");
       getApplication()

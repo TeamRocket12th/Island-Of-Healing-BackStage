@@ -29,15 +29,19 @@ const getFee = async () => {
 }
 onMounted(getFee)
 // 新增費用單
-const id = ref('')
+const writerId = ref('')
 const createFee = async () => {
   const token = localStorage.getItem('token')
 
   if (!token) {
     return
   }
+  if (!writerId.value) {
+    alert('請輸入作家編號')
+    return
+  }
   try {
-    const res: ApiResponse = await fetch(`${apiBase}/expense/create?userid=${id.value}`, {
+    const res: ApiResponse = await fetch(`${apiBase}/expense/create?userid=${writerId.value}`, {
       method: 'POST',
       headers: { 'Content-type': 'application/json', Authorization: `Bearer ${token}` }
     })
@@ -49,7 +53,7 @@ const createFee = async () => {
       throw new Error(`發生錯誤 ${data.Message}`)
     }
   } catch (error) {
-    console.log(error)
+    alert(error)
   }
 }
 
@@ -112,7 +116,7 @@ const formatDate = (dateString: string) => {
   <div class="flex mb-10">
     <input
       class="px-2 border shadow-md"
-      v-model="id"
+      v-model="writerId"
       placeholder="請輸入作家編號"
       type="text"
     /><button
