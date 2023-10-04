@@ -45,33 +45,37 @@ const toggleSidebar = () => {
 </script>
 
 <template>
-  <main class="bg-slate-100 grid min-h-screen" :class="isSidebarOpen ? 'grid-cols-12' : 'block'">
-    <div class="relative" :class="isSidebarOpen ? 'col-span-2' : ''">
-      <div
-        class="absolute h-full bg-slate-200 transition-all duration-300 ease-in-out overflow-hidden"
-        :class="isSidebarOpen ? 'left-0' : '-left-full'"
-      >
-        <SideBar />
-      </div>
+  <main class="relative min-h-screen">
+    <div
+      :class="isSidebarOpen ? 'w-48' : 'w-0'"
+      class="h-full fixed bg-slate-200 transition-all duration-300 z-10 overflow-hidden"
+    >
+      <SideBar />
+    </div>
+
+    <div :class="isSidebarOpen ? 'ml-48' : 'ml-0'" class="h-full transition-all duration-300">
+      <!-- Button to toggle sidebar -->
       <button
         @click="toggleSidebar"
-        class="absolute top-1/4 transform -translate-x-[-50%] translate-y-2 bg-slate-500 text-white border-none rounded-full p-2 transition-all duration-300"
-        :style="{ left: isSidebarOpen ? '14rem' : '0' }"
+        class="fixed top-1/4 bg-slate-500 text-white rounded-full p-2 z-20"
+        :style="{ left: isSidebarOpen ? '11rem' : '1rem' }"
       >
         <span v-if="isSidebarOpen">-</span>
         <span v-else>+</span>
       </button>
-    </div>
-    <div class="bg-slate-100 p-6" :class="isSidebarOpen ? 'col-span-10' : 'col-span-full'">
-      <div v-if="showFeatures">
-        <h2 class="text-2xl font-semibold text-slate-800 mb-10">目前功能</h2>
-        <ul>
-          <li v-for="feat in announcement" :key="feat.id" class="mb-2">
-            {{ feat.id + '. ' + feat.content }}
-          </li>
-        </ul>
+
+      <!-- Main Content -->
+      <div class="bg-slate-100 p-12">
+        <div v-if="showFeatures">
+          <h2 class="text-2xl font-semibold text-slate-800 mb-10">目前功能</h2>
+          <ul>
+            <li v-for="feat in announcement" :key="feat.id" class="mb-2">
+              {{ feat.id + '. ' + feat.content }}
+            </li>
+          </ul>
+        </div>
+        <RouterView />
       </div>
-      <RouterView />
     </div>
   </main>
 </template>
