@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { ref } from 'vue'
-import { useRouter } from 'vue-router'
+import { ref, watch } from 'vue'
+import { useRoute } from 'vue-router'
 import SideBar from '../components/SideBar.vue'
 
 const announcement = ref([
@@ -26,16 +26,20 @@ const announcement = ref([
   }
 ])
 
-const router = useRouter()
-
 const showFeatures = ref(true)
-router.beforeEach((to) => {
-  if (to.path !== '/dashboard') {
-    showFeatures.value = false
-  } else {
-    showFeatures.value = true
-  }
-})
+const route = useRoute()
+
+watch(
+  () => route.path,
+  (newPath, oldPath) => {
+    if (newPath !== '/dashboard') {
+      showFeatures.value = false
+    } else {
+      showFeatures.value = true
+    }
+  },
+  { immediate: true }
+)
 
 const isSidebarOpen = ref(true)
 
@@ -45,16 +49,15 @@ const toggleSidebar = () => {
 </script>
 
 <template>
-  <main class="relative min-h-screen">
+  <main class="bg-slate-100 relative min-h-screen">
     <div
       :class="isSidebarOpen ? 'w-48' : 'w-0'"
-      class="h-full fixed bg-slate-200 transition-all duration-300 z-10 overflow-hidden"
+      class="h-full absolute bg-slate-200 transition-all duration-300 z-10 overflow-hidden"
     >
       <SideBar />
     </div>
 
     <div :class="isSidebarOpen ? 'ml-48' : 'ml-0'" class="h-full transition-all duration-300">
-      <!-- Button to toggle sidebar -->
       <button
         @click="toggleSidebar"
         class="fixed top-1/4 bg-slate-500 text-white rounded-full p-2 z-20"
@@ -63,9 +66,7 @@ const toggleSidebar = () => {
         <span v-if="isSidebarOpen">-</span>
         <span v-else>+</span>
       </button>
-
-      <!-- Main Content -->
-      <div class="bg-slate-100 p-12">
+      <div class="bg-slate-100 p-14">
         <div v-if="showFeatures">
           <h2 class="text-2xl font-semibold text-slate-800 mb-10">目前功能</h2>
           <ul>
