@@ -25,7 +25,6 @@ const getHotWord = async () => {
       }
     )
     const data = await res.json()
-    console.log(data)
     if (data.StatusCode === 200) {
       datas.value = data.sortedReturnResult
     } else {
@@ -49,7 +48,11 @@ onMounted(getHotWord)
         <option value="0">整年</option>
         <option v-for="month in months" :key="month" :value="month">{{ month }}</option>
       </select>
-      <button class="border h-[40px] px-4 bg-blue-900 text-white rounded" @click="getHotWord">
+      <button
+        type="button"
+        class="h-9 px-4 bg-blue-900 text-white hover:bg-blue-800 rounded-md"
+        @click="getHotWord"
+      >
         查詢
       </button>
     </div>
