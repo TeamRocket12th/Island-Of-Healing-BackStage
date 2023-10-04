@@ -1,4 +1,4 @@
-<script setup lang="ts"  type = 'module'>
+<script setup lang="ts" type="module">
 import { ref, onMounted } from 'vue'
 import Swal from 'sweetalert2';
 const apiBase = import.meta.env.VITE_API_URL
@@ -28,11 +28,8 @@ const getApplication = async () => {
       headers: { 'Content-type': 'application/json', Authorization: `Bearer ${token}` }
     })
     const data = await res.json()
-    console.log(data)
     if (data.StatusCode === 200) {
       userData.value = data.UserData
-      console.log('userData', userData.value);
-      
     } else {
       throw new Error(`發生錯誤 ${data.Message}`)
     }
@@ -55,9 +52,7 @@ const sendResult = async (id: number) => {
       method: 'POST'
     })
     const data = await res.json()
-    console.log(data)
     if (data.StatusCode === 200) {
-      console.log(data.Message)
       await pushWriter(id)
     } else {
       throw new Error(`發生錯誤 ${data.Message}`)
@@ -80,10 +75,7 @@ const pushWriter = async (id: number) => {
       method: 'POST'
     })
     const data = await res.json()
-    console.log(data)
-    if (data.StatusCode === 200) {
-      console.log('pushed')
-    } else {
+    if (data.StatusCode !== 200) {
       throw new Error(`發生錯誤 ${data.Message}`)
     }
   } catch (error) {
@@ -106,7 +98,6 @@ const changeRole = async (id: number, result: string) => {
       method: 'PUT'
     })
     const data = await res.json()
-    console.log(data)
     if (data.StatusCode === 200) {
       alert(data.Message)
       sendResult(id)
@@ -133,10 +124,9 @@ const cancelRole = (id: number) => {
     confirmButtonText: "確定刪除",
     cancelButtonText: "關閉"
   }).then((result:any) => {
-    // console.log(result);
     if (result.isConfirmed) {
       cancelWriters(id);
-     
+
     }
   });
 };
@@ -152,7 +142,6 @@ const cancelWriters = async (id: number) => {
       method: 'PUT'
     })
     const data = await res.json()
-    console.log(data)
     if (data.StatusCode === 200) {
       Swal.fire("已刪除", "該作家身份刪除成功", "success");
       getApplication()
@@ -164,8 +153,6 @@ const cancelWriters = async (id: number) => {
     console.log(error)
   }
 }
-
-
 </script>
 <template>
   <div v-if="userData" class="flex flex-col">
@@ -234,28 +221,27 @@ const cancelWriters = async (id: number) => {
                   <div v-if="user.WriterProgress === '已申請'" class="flex gap-4">
                     <button
                       type="button"
-                      class="btn btn-sm font-medium bg-green-300"
+                      class="btn btn-sm font-normal bg-emerald-600 opacity-90 text-white hover:bg-emerald-700"
                       @click="changeRole(user.Id, '3')"
                     >
                       審核通過
                     </button>
                     <button
                       type="button"
-                      class="btn btn-sm font-medium bg-red-300"
+                      class="btn btn-sm font-normal bg-rose-700 text-white hover:bg-rose-800"
                       @click="changeRole(user.Id, '2')"
                     >
                       審核失敗
                     </button>
                   </div>
                   <div v-else-if="user.WriterProgress === '申請成功'" class="flex gap-4">
-                      <button
-                        type="button"
-                        class="btn btn-sm font-medium bg-red-600 text-white"
-                        @click="
-                        cancelRole(user.Id)"
-                      >
+                    <button
+                      type="button"
+                      class="btn btn-sm font-normal border-orange-200 bg-slate-50 border-2 hover:bg-orange-400 hover:text-white"
+                      @click="cancelRole(user.Id)"
+                    >
                       取消作家身份
-                      </button>
+                    </button>
                   </div>
                   <div v-else>-</div>
                 </td>
